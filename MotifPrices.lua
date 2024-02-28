@@ -1,11 +1,12 @@
-MotifPrices = {
+MotifPricesNamespace = {
     name = "MotifPrices",
     version = "1.0",
     author = "TheMrPancake",
     defaults = {},
 }
 
-local styles = { -- type, achievement id, first motif id, visual id
+-- Style list from CraftStore addon with some changes
+local styles = {
     [11] = {1423,74556}, -- Thieves Guild
     [12] = {1661,82055}, -- Dark Brotherhood
     [13] = {1412,71567}, -- Malacath
@@ -24,7 +25,7 @@ local styles = { -- type, achievement id, first motif id, visual id
     [33] = {1318,57591}, -- Akaviri
     [35] = {1713,57606}, -- Yokudan
     [39] = {1662,82072}, -- Minotaur
-    [40] = {1798,75229}, --Ebony
+    [40] = {1798,75229}, -- Ebony
     [41] = {1422,74540}, -- Abah's Watch
     [42] = {1676,73855}, -- Skinchanger
     [43] = {1933,73839}, -- Morag Tong
@@ -39,9 +40,9 @@ local styles = { -- type, achievement id, first motif id, visual id
     [52] = {1934,121317}, -- Buoyant Armiger
     [54] = {1932,124680}, -- Ashlander
     [55] = {2120,134740}, -- Worm Cult
-    [56] = {1796,114968}, --Silken Ring
-    [57] = {1795,114952}, --Mazzatun
-    [59] = {1545,82023}, -- Hollowjack
+    [56] = {1796,114968}, -- Silken Ring
+    [57] = {1795,114952}, -- Mazzatun
+    [59] = {1545,82023},  -- Hollowjack
     [60] = {2024,130027}, -- Refabricated
     [61] = {2098,132534}, -- Bloodforge
     [62] = {2097,132566}, -- Dreadhorn
@@ -184,13 +185,13 @@ local function allMotifPrices()
 end
 
 local function Init(event, name)
-    if name ~= MotifPrices.name then return end
-    EVENT_MANAGER:UnregisterForEvent(MotifPrices.name, EVENT_ADD_ON_LOADED)
+    if name ~= MotifPricesNamespace.name then return end
+    EVENT_MANAGER:UnregisterForEvent(MotifPricesNamespace.name, EVENT_ADD_ON_LOADED)
 
     SLASH_COMMANDS["/mpunknown"] = unknownMotifPrices
     SLASH_COMMANDS["/mptotal"] = allMotifPrices
 end
 
 
-EVENT_MANAGER:RegisterForEvent(MotifPrices.name, EVENT_ADD_ON_LOADED, Init)
+EVENT_MANAGER:RegisterForEvent(MotifPricesNamespace.name, EVENT_ADD_ON_LOADED, Init)
     
