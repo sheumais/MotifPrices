@@ -5,6 +5,8 @@ MotifPricesNamespace = {
     defaults = {},
 }
 
+local savedVariables
+
 -- Style list from CraftStore addon with some changes
 local styles = {
     [11] = {1423,74556}, -- Thieves Guild
@@ -184,12 +186,37 @@ local function allMotifPrices()
     end
 end
 
+local function dumpMotifPricesToSavedVariables()
+    savedVariables.motifPrices = {}
+    for id = 1,144 do
+        if styles[id] ~= nil then
+            for chapter = 1,14 do
+                link = ('|H0:item:%u:5:1:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0|h|h'):format(styles[id][2] + (chapter - 1)) 
+                price = TamrielTradeCentrePrice:GetPriceInfo(link)
+                if price ~= nil then
+                    if price.SuggestedPrice ~= nil then
+                        savedVariables.motifPrices[link] = price.SuggestedPrice .. "," .. tostring(isKnownStyle(id,chapter))
+                    elseif price.SaleAvg ~= nil then
+                        savedVariables.motifPrices[link] = price.SaleAvg .. "," .. tostring(isKnownStyle(id,chapter))
+                    end
+                else
+                    savedVariables.motifPrices[link] = "???" .. "," .. tostring(isKnownStyle(id,chapter))
+                end
+            end
+        end
+    end
+end
+
+
 local function Init(event, name)
     if name ~= MotifPricesNamespace.name then return end
     EVENT_MANAGER:UnregisterForEvent(MotifPricesNamespace.name, EVENT_ADD_ON_LOADED)
 
+    savedVariables = ZO_SavedVars:NewAccountWide("MotifPrices_SavedVariables", 1, nil, MotifPricesNamespace.defaults)
+    
     SLASH_COMMANDS["/mpunknown"] = unknownMotifPrices
     SLASH_COMMANDS["/mptotal"] = allMotifPrices
+    SLASH_COMMANDS["/mpdump"] = dumpMotifPricesToSavedVariables
 end
 
 
